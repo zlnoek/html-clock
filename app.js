@@ -45,6 +45,8 @@ var $colon = $('<span id="colon" class="time">:<span/>');
 
 var colon = true;
 
+var cat = '<img src="cat.png" width="9%" height="9%"><src/>';
+
 $('.border').append($hour,$colon,$min,day);
 
 setInterval(function() {
@@ -58,9 +60,19 @@ setInterval(function() {
   }
   if (hour < 10) {
     hour = ('0' + hour).slice(-2);
+  } else{
+    $hour = $('<span id="hour" class="time">'+hour+'<span/>');
+    $('#hour').replaceWith($hour);
   }
   if (min < 10) {
-    min = ('0' + min).slice(-2);
+    $min = $('<span id="min" class="time">'+cat+min+'<span/>');
+    $('#min').replaceWith($min);
+  } else{
+    min = min.toString();
+    min = min.slice(0,-1);
+    min = min.parseInt();
+    $min = $('<span id="min" class="time">'+min+'<span/>');
+    $('#min').replaceWith($min);
   }
   if (sec < 10) {
     sec = ('0' + sec).slice(-2);
@@ -68,19 +80,13 @@ setInterval(function() {
   if (colon == true) {
     colon = false;
     $colon = $('<span id="colon" class="time"> <span/>');
-    console.log('COLON is true:', $('#colon'),$colon);
     $('#colon').replaceWith($colon);
   } else if (colon == false) {
     colon = true;
     $colon = $('<span id="colon" class="time">:<span/>');
-    console.log('COLON is false:', $('#colon'),$colon);
     $('#colon').replaceWith($colon);
   }
 
-  $hour = $('<span id="hour" class="time">'+hour+'<span/>');
-  $('#hour').replaceWith($hour);
-  $min = $('<span id="min" class="time">'+min+'<span/>');
-  $('#min').replaceWith($min);
 }, 1000); 
 
 setInterval(function() {
@@ -89,3 +95,5 @@ setInterval(function() {
   var c = Math.floor((Math.random() * 255) + 1);
   $('.border').css("background-color", "rgb("+a+","+b+","+c+")");
 }, 2000);
+
+
