@@ -29,10 +29,21 @@ var day = "";
     day = '<span> AM<span/>';
   }
   if (hour < 10) {
-    hour = ('0' + hour).slice(-2);
+    $hour = $('<span id="hour" class="time">'+cat+hour+'<span/>');
+    $('#hour').replaceWith($hour);
+  } else{
+    $hour = $('<span id="hour" class="time">'+hour+'<span/>');
+    $('#hour').replaceWith($hour);
   }
   if (min < 10) {
-    min = ('0' + min).slice(-2);
+    $min = $('<span id="min" class="time">'+cat+min+'<span/>');
+    $('#min').replaceWith($min);
+  } else if (min%10 == 0) {
+    min = min.toString();
+    min = min.slice(0,-1);
+    min = parseInt(min);
+    $min = $('<span id="min" class="time">'+min+cat+'<span/>');
+    $('#min').replaceWith($min);
   }
   if (sec < 10) {
     sec = ('0' + sec).slice(-2);
@@ -61,7 +72,8 @@ setInterval(function() {
     day = '<span> AM<span/>';
   }
   if (hour < 10) {
-    hour = ('0' + hour).slice(-2);
+    $hour = $('<span id="hour" class="time">'+cat+hour+'<span/>');
+    $('#hour').replaceWith($hour);
   } else{
     $hour = $('<span id="hour" class="time">'+hour+'<span/>');
     $('#hour').replaceWith($hour);
@@ -69,11 +81,11 @@ setInterval(function() {
   if (min < 10) {
     $min = $('<span id="min" class="time">'+cat+min+'<span/>');
     $('#min').replaceWith($min);
-  } else{
+  } else if (min%10 == 0) {
     min = min.toString();
     min = min.slice(0,-1);
-    min = min.parseInt();
-    $min = $('<span id="min" class="time">'+min+'<span/>');
+    min = parseInt(min);
+    $min = $('<span id="min" class="time">'+min+cat+'<span/>');
     $('#min').replaceWith($min);
   }
   if (sec < 10) {
@@ -118,29 +130,35 @@ setInterval(function() {
     $('.border').append($min,$colon,$sec);
     $('.container4').append('<button id="start">Start<button/>');
     $('#start').click(function() {
+      $(this).slideUp();
+      min = 0;
+      sec = 0;
+      $('.container4').append('<button id="stop">Stop<button/>');
+      var start = setInterval(function() {
+        sec++;
+        if (sec == 59) {
+          min += 1;
+          sec = 0;
+        }
+        if (sec < 10) {
+          sec = ("0" + sec).slice(-2);
+        }
+        if (min < 10) {
+          min = ("0" + min).slice(-2);
+        }
+        $min = $('<span id="min" class="time">'+min+'<span/>');
+        $sec = $('<span id="sec" class="time">'+sec+'<span/>');
+        $('#min').replaceWith($min);
+        $('#sec').replaceWith($sec);
+      }, 1000);              
+      $('#stop').click(function() {
         $(this).slideUp();
-        min = 0;
-        sec = 0;
-        $('.container4').append('<button id="stp[]">Stop<button/>');
-        var start = setInterval(function() {
-          sec++;
-          if (sec == 59) {
-            min += 1;
-            sec = 0;
-          }
-          if (sec < 10) {
-            sec = ("0" + sec).slice(-2);
-          }
-          if (min < 10) {
-            min = ("0" + min).slice(-2);
-          }
-          $min = $('<span id="min" class="time">'+min+'<span/>');
-          $sec = $('<span id="sec" class="time">'+sec+'<span/>');
-          $('#min').replaceWith($min);
-          $('#sec').replaceWith($sec);
-        }, 1000);
-        
-
+        clearInterval(start);
+        $('.container4').append('<button id="return">Stopwatch<button/>');
+        $('#return').click(function() {
+          location.reload();
+        });
+      });
     });
   });
 
